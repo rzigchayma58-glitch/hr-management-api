@@ -1,0 +1,46 @@
+server:
+  port: ${SERVER_PORT:3000}
+  address: 0.0.0.0  # Écouter sur toutes les interfaces réseau
+
+spring:
+  application:
+    name: hr-management-api
+
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/rh_xtensus?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: false
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+app:
+  security:
+    jwt-secret: ${JWT_SECRET:replace_with_a_secure_secret_of_at_least_32_characters}
+    jwt-expiration-ms: ${JWT_EXPIRATION_MS:3600000}
+
+  storage:
+    medical-certificates-path: ${MEDICAL_CERTIFICATES_PATH:./storage/medical-certificates}
+    max-file-size: 5MB
+    allowed-types:
+      - application/pdf
+      - image/jpeg
+      - image/png
+
+  leave-accrual:
+    enabled: ${LEAVE_ACCRUAL_ENABLED:true}
+    monthly-days: ${LEAVE_ACCRUAL_MONTHLY_DAYS:2.16}
+    cron: ${LEAVE_ACCRUAL_CRON:0 0 1 1 * *}
+    zone: ${LEAVE_ACCRUAL_ZONE:Africa/Tunis}
